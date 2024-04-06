@@ -38,10 +38,12 @@ class ProductCard extends StatelessWidget {
                     ),
                     child: AspectRatio(
                       aspectRatio: 1,
-                      child: Image.network(
-                        product.thumbnail,
-                        fit: BoxFit.cover,
-                      ),
+                      child: product.thumbnail == null
+                          ? const Icon(Icons.image_not_supported)
+                          : Image.network(
+                              product.thumbnail!,
+                              fit: BoxFit.cover,
+                            ),
                     ),
                   ),
                   Align(
@@ -89,14 +91,15 @@ class ProductCard extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          product.discountedPrice.toPeso,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 12,
+                        Flexible(
+                          child: Text(
+                            product.discountedPrice.toPeso,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 12,
+                            ),
                           ),
                         ),
-                        const Spacer(),
                         Text(
                           "stock: ${product.stock}",
                           style: const TextStyle(

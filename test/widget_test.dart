@@ -1,30 +1,89 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:products_app/core/extensions/double.dart';
+import 'package:products_app/core/models/product.dart';
+import 'package:products_app/src/product/widgets/rating_renderer.dart';
+import 'package:products_app/src/products_list/widgets/product_card.dart';
+import 'package:products_app/src/shared/components/custom_carousel.dart';
 
-import 'package:products_app/main.dart';
+class CustomBindings extends AutomatedTestWidgetsFlutterBinding {
+  @override
+  bool get overrideHttpClient => false;
+}
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  CustomBindings();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  testWidgets(
+    "Product Card display all required data",
+    (WidgetTester tester) async {
+      TestWidgetsFlutterBinding.ensureInitialized();
+      String productTitle = 'Product 1';
+      double price = 100;
+      int stock = 1;
+      double discountPercentage = 69.9;
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+      ProductCard productCard = ProductCard(
+        product: Product(
+          id: '1',
+          discountPercentage: discountPercentage,
+          price: price,
+          title: productTitle,
+          stock: stock,
+        ),
+      );
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
-  });
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Column(
+              children: [
+                productCard,
+              ],
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+
+      expect(find.text(productTitle), findsOneWidget);
+      expect(find.text(price.toPeso), findsOneWidget);
+      expect(find.text("stock: $stock"), findsOneWidget);
+      expect(find.text("- ${discountPercentage.toPercentage}"), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    "CustomCarousel displays correct number items",
+    (WidgetTester tester) async {
+      await tester.pumpWidget(const MaterialApp(
+        home: CustomCarousel(
+          items: [
+            Text("Item 1"),
+            Text("Item 2"),
+            Text("Item 3"),
+          ],
+        ),
+      ));
+      await tester.pump();
+
+      expect(find.text("Item 1"), findsOneWidget);
+      expect(find.text("Item 2"), findsOneWidget);
+      expect(find.text("Item 3"), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    "RatingRenderer displays the correct number of stars",
+    (WidgetTester tester) async {
+      RatingRenderer ratingRenderer = const RatingRenderer(rating: 4.5);
+
+      await tester.pumpWidget(MaterialApp(
+        home: ratingRenderer,
+      ));
+
+      expect(find.byIcon(Icons.star), findsNWidgets(4));
+      expect(find.byIcon(Icons.star_half), findsOneWidget);
+    },
+  );
 }

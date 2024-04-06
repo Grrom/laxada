@@ -2,7 +2,7 @@ class Product {
   final String id;
   final String title;
   final double price;
-  final String thumbnail;
+  final String? thumbnail;
   final int stock;
   final double discountPercentage;
   final String? brand;
@@ -19,9 +19,9 @@ class Product {
     required this.id,
     required this.title,
     required this.price,
-    required this.thumbnail,
     required this.stock,
     required this.discountPercentage,
+    this.thumbnail,
     this.description,
     this.brand,
     this.category,

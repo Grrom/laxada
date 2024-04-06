@@ -46,7 +46,7 @@ class _ProductScreenState extends State<ProductScreen> {
                 height: 260,
                 child: ProductImageCarousel(
                   images: provider.getProductById(product.id).images ??
-                      [product.thumbnail],
+                      (product.thumbnail != null ? [product.thumbnail!] : []),
                 ),
               ),
               Padding(
