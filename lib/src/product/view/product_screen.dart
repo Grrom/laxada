@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:products_app/core/extensions/double.dart';
 import 'package:products_app/core/models/product.dart';
 import 'package:products_app/core/providers/products_provider.dart';
-import 'package:products_app/src/product/widgets/images_carousel.dart';
+import 'package:products_app/src/product/widgets/product_description_loader.dart';
+import 'package:products_app/src/product/widgets/product_images_carousel.dart';
+import 'package:products_app/src/product/widgets/rating_renderer.dart';
 import 'package:provider/provider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class ProductScreen extends StatefulWidget {
   static const String routeName = '/product';
@@ -34,11 +37,7 @@ class _ProductScreenState extends State<ProductScreen> {
         title: Text(widget.product.title),
       ),
       body: Consumer<ProductsProvider>(builder: (context, provider, _) {
-        if (provider.isProductFetching(widget.product.id)) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
+        Product product = provider.getProductById(widget.product.id);
         return SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,8 +45,8 @@ class _ProductScreenState extends State<ProductScreen> {
               SizedBox(
                 height: 260,
                 child: ProductImageCarousel(
-                  images: provider.getProductById(widget.product.id).images ??
-                      [widget.product.thumbnail],
+                  images: provider.getProductById(product.id).images ??
+                      [product.thumbnail],
                 ),
               ),
               Padding(
@@ -60,14 +59,14 @@ class _ProductScreenState extends State<ProductScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            widget.product.title,
+                            product.title,
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
                             ),
                           ),
                           Text(
-                            "stock: ${widget.product.stock}",
+                            "stock: ${product.stock}",
                             style: const TextStyle(fontSize: 10),
                           ),
                         ],
@@ -76,34 +75,35 @@ class _ProductScreenState extends State<ProductScreen> {
                       Row(
                         children: [
                           Text(
-                            widget.product.discountedPrice.toPeso,
+                            product.discountedPrice.toPeso,
                             style: const TextStyle(fontWeight: FontWeight.w500),
                           ),
                           const SizedBox(width: 8),
                           Text(
-                            widget.product.price.toPeso,
+                            product.price.toPeso,
                             style: const TextStyle(
                               decoration: TextDecoration.lineThrough,
                             ),
                           ),
                           const SizedBox(width: 8),
                           Text(
-                            "- ${widget.product.discountPercentage.toPercentage}",
+                            "- ${product.discountPercentage.toPercentage}",
                             style: const TextStyle(
                               color: Colors.red,
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 16),
-                      const Text(
-                        "Description",
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                      Skeletonizer(
+                        enabled: product.rating == null,
+                        child: product.rating == null
+                            ? const SizedBox()
+                            : Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: RatingRenderer(rating: product.rating!),
+                              ),
                       ),
-                      const Text(
-                        "Lorem ipsum",
-                        style: TextStyle(fontSize: 12, height: 1.5),
-                      ),
+                      ProductDescriptionLoader(product: product),
                     ],
                   ),
                 ),

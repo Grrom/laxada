@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:products_app/src/products_list/widgets/custom_carousel.dart';
+import 'package:products_app/src/shared/components/custom_carousel.dart';
 
 class ProductImageCarousel extends StatelessWidget {
   final List<String> images;
