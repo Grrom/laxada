@@ -2,8 +2,8 @@ class Product {
   final String title;
   final double price;
   final String thumbnail;
-  final String stock;
-  final String discountPercentage;
+  final int stock;
+  final double discountPercentage;
 
   Product(
       {required this.title,
@@ -15,10 +15,10 @@ class Product {
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
       title: json['title'],
-      price: json['price'],
+      price: double.parse(json['price'].toString()),
       thumbnail: json['thumbnail'],
       stock: json['stock'],
-      discountPercentage: json['discount_percentage'],
+      discountPercentage: double.parse(json['discountPercentage'].toString()),
     );
   }
 

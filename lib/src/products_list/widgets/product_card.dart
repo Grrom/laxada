@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:products_app/core/extensions/double.dart';
 import 'package:products_app/core/models/product.dart';
 import 'package:products_app/src/product/view/product_screen.dart';
 
@@ -10,7 +11,7 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 160,
+      width: 166,
       child: GestureDetector(
         onTap: () {
           Navigator.pushNamed(
@@ -26,6 +27,7 @@ class ProductCard extends StatelessWidget {
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Stack(
                 children: [
@@ -34,8 +36,12 @@ class ProductCard extends StatelessWidget {
                       topLeft: Radius.circular(8),
                       topRight: Radius.circular(8),
                     ),
-                    child: Image.network(
-                      "https://ichef.bbci.co.uk/news/976/cpsprodpb/16620/production/_91408619_55df76d5-2245-41c1-8031-07a4da3f313f.jpg",
+                    child: AspectRatio(
+                      aspectRatio: 1,
+                      child: Image.network(
+                        product.thumbnail,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                   Align(
@@ -50,10 +56,10 @@ class ProductCard extends StatelessWidget {
                         horizontal: 8,
                       ),
                       child: Text(
-                        "- ${product.discountPercentage}",
+                        "- ${product.discountPercentage.toPercentage}",
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 12,
+                          fontSize: 10,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -65,20 +71,26 @@ class ProductCard extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      product.title,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                        height: 1.5,
+                    SizedBox(
+                      height: 44,
+                      child: Text(
+                        product.title,
+                        maxLines: 2,
+                        style: const TextStyle(
+                          overflow: TextOverflow.ellipsis,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          height: 1.5,
+                        ),
                       ),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          product.price.toString(),
+                          product.price.toPeso,
                           style: const TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 12,
