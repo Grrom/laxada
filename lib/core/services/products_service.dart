@@ -23,4 +23,19 @@ class ProductsService {
       throw Exception('Failed to load products');
     }
   }
+
+  static Future<Product> getProductById(String id) async {
+    Uri uri = Uri.parse("$baseUrl/$id");
+
+    final Response response = await _client.get(uri, headers: {
+      'Content-Type': 'application/json',
+    });
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> productJson = json.decode(response.body);
+      return Product.fromJson(productJson);
+    } else {
+      throw Exception('Failed to load product');
+    }
+  }
 }

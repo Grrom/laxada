@@ -3,5 +3,5 @@ import 'package:flutter/material.dart';
 class CustomColors {
   const CustomColors._();
 
-  static Color foreground = const Color(0xF0F0F0F0);
+  static Color lightGrey = const Color(0xF0F0F0F0);
 }

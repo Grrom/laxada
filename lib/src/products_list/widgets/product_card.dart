@@ -96,13 +96,6 @@ class ProductCard extends StatelessWidget {
                             fontSize: 12,
                           ),
                         ),
-                        Text(
-                          product.price.toPeso,
-                          style: const TextStyle(
-                            decoration: TextDecoration.lineThrough,
-                            fontSize: 10,
-                          ),
-                        ),
                         const Spacer(),
                         Text(
                           "stock: ${product.stock}",
@@ -111,7 +104,14 @@ class ProductCard extends StatelessWidget {
                           ),
                         ),
                       ],
-                    )
+                    ),
+                    Text(
+                      product.price.toPeso,
+                      style: const TextStyle(
+                        decoration: TextDecoration.lineThrough,
+                        fontSize: 10,
+                      ),
+                    ),
                   ],
                 ),
               ),

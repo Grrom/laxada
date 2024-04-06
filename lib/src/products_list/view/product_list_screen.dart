@@ -9,12 +9,11 @@ class ProductListScreen extends StatelessWidget {
   static const String routeName = '/product-list';
 
   const ProductListScreen({super.key});
-  // return NotificationListener<ScrollNotification>(
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CustomColors.foreground,
+      backgroundColor: CustomColors.lightGrey,
       appBar: AppBar(
         title: const Text(
           Constants.appName,
@@ -40,7 +39,8 @@ class ProductListScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 child: Builder(
                   builder: (context) {
-                    if (provider.products.isEmpty) {
+                    if (provider.products.isEmpty &&
+                        !provider.isFetchingProducts) {
                       return const Text(
                         'No products found',
                         style: TextStyle(
@@ -56,8 +56,9 @@ class ProductListScreen extends StatelessWidget {
                           runSpacing: 4,
                           children: List.generate(
                             provider.products.length,
-                            (index) =>
-                                ProductCard(product: provider.products[index]),
+                            (index) => ProductCard(
+                              product: provider.products[index],
+                            ),
                           ),
                         ),
                         Container(
