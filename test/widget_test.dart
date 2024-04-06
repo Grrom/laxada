@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:products_app/core/extensions/double.dart';
 import 'package:products_app/core/models/product.dart';
+import 'package:products_app/src/product/widgets/product_description_loader.dart';
 import 'package:products_app/src/product/widgets/rating_renderer.dart';
 import 'package:products_app/src/products_list/widgets/product_card.dart';
 import 'package:products_app/src/shared/components/custom_carousel.dart';
@@ -84,6 +85,35 @@ void main() {
 
       expect(find.byIcon(Icons.star), findsNWidgets(4));
       expect(find.byIcon(Icons.star_half), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    "ProductDescriptionLoader displays the correct widget",
+    (WidgetTester tester) async {
+      Product product = Product(
+        id: '1',
+        discountPercentage: 69.9,
+        description: "Product description",
+        price: 100,
+        title: 'Product 1',
+        brand: 'Brand X',
+        stock: 69,
+        category: 'Shrek action figures',
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          home: ProductDescriptionLoader(
+            product: product,
+          ),
+        ),
+      );
+      await tester.pump();
+
+      expect(find.byType(ProductDescriptionLoader), findsOneWidget);
+      expect(find.text(product.description!), findsOneWidget);
+      expect(find.text('brand: ${product.brand ?? ""}'), findsOneWidget);
+      expect(find.text('category: ${product.category ?? ""}'), findsOneWidget);
     },
   );
 }
