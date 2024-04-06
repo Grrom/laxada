@@ -90,12 +90,20 @@ class ProductCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          product.price.toPeso,
+                          product.discountedPrice.toPeso,
                           style: const TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 12,
                           ),
                         ),
+                        Text(
+                          product.price.toPeso,
+                          style: const TextStyle(
+                            decoration: TextDecoration.lineThrough,
+                            fontSize: 10,
+                          ),
+                        ),
+                        const Spacer(),
                         Text(
                           "stock: ${product.stock}",
                           style: const TextStyle(

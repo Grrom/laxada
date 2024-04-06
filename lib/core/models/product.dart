@@ -5,12 +5,17 @@ class Product {
   final int stock;
   final double discountPercentage;
 
-  Product(
-      {required this.title,
-      required this.price,
-      required this.thumbnail,
-      required this.stock,
-      required this.discountPercentage});
+  double get discountedPrice {
+    return price / (1 + (discountPercentage / 100));
+  }
+
+  Product({
+    required this.title,
+    required this.price,
+    required this.thumbnail,
+    required this.stock,
+    required this.discountPercentage,
+  });
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
